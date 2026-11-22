@@ -57,6 +57,20 @@ main { max-width: 760px; margin: 0 auto; padding: 20px; }
   margin-top: 16px;
 }
 
+/* Secciones por división en la pantalla principal */
+.division-list { margin-top: 8px; }
+.division { margin-top: 28px; }
+.division:first-child { margin-top: 12px; }
+.division-title {
+  font-size: 1rem;
+  margin: 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  text-transform: uppercase;
+}
+.division .team-grid { margin-top: 12px; }
+
 .team-card {
   background: var(--card);
   border: 1px solid var(--border);
