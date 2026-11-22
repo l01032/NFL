@@ -1,0 +1,41 @@
+name: Actualizar datos NFL
+
+on:
+  schedule:
+    # 10:00 UTC = 04:00 hora de Colombia. Distinto horario al de NBA para
+    # que no compitan por minutos al mismo tiempo (no es obligatorio, solo prolijo).
+    - cron: "0 10 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Traer los partidos nuevos
+        env:
+          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
+        run: |
+          cd backend
+          python sync.py update
+
+      - name: Subir nfl_local.db si cambio
+        run: |
+          git config user.name "nfl-stats-bot"
+          git config user.email "actions@github.com"
+          git add nfl_local.db
+          git diff --staged --quiet || git commit -m "Actualizacion automatica de partidos"
+          git push
